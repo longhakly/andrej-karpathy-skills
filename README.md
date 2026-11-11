@@ -1,16 +1,29 @@
-# Karpathy-Inspired Claude Code Guidelines
+# Karpathy-Inspired Coding Agent Guidelines
 
-> Check out my new project [Multica](https://github.com/multica-ai/multica) — an open-source platform for running and managing coding agents with reusable skills.
->
-> Follow me on X: [https://x.com/jiayuan_jy](https://x.com/jiayuan_jy)
+> **Fork & Extension Notice:**  
+> This project is built on top of [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) (by [@jiayuan_jy](https://x.com/jiayuan_jy) / [Multica](https://github.com/multica-ai/multica)), derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls.  
+> We expanded the original Claude Code guidelines into a universal, multi-assistant toolkit with first-class support for **Google Antigravity**, **OpenAI Codex**, **Cursor**, and **Claude Code**.
 
-A single `CLAUDE.md` file to improve Claude Code behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls.
+Actionable behavioral guidelines to reduce common AI coding mistakes, eliminate overcomplication, ensure surgical diffs, and enable test-driven execution loops.
 
 English | [简体中文](./README.zh.md)
 
+---
+
+## Supported Coding Assistants
+
+| Assistant | Rule / Instruction File | Skill Format | Integration Guide |
+|---|---|---|---|
+| **Google Antigravity** | [`GEMINI.md`](GEMINI.md) / [`AGENTS.md`](AGENTS.md) | `.agents/skills/karpathy-guidelines/` | [ANTIGRAVITY.md](ANTIGRAVITY.md) |
+| **OpenAI Codex** | [`AGENTS.md`](AGENTS.md) | `.agents/skills/karpathy-guidelines/` | [CODEX.md](CODEX.md) |
+| **Claude Code** | [`CLAUDE.md`](CLAUDE.md) | Plugin / Marketplace | [Claude Code Setup](#1-claude-code) |
+| **Cursor** | [`.cursor/rules/`](.cursor/rules/karpathy-guidelines.mdc) | `~/.cursor/skills/` | [CURSOR.md](CURSOR.md) |
+
+---
+
 ## The Problems
 
-From Andrej's post:
+From Andrej Karpathy's post:
 
 > "The models make wrong assumptions on your behalf and just run along with them without checking. They don't manage their confusion, don't seek clarifications, don't surface inconsistencies, don't present tradeoffs, don't push back when they should."
 
@@ -20,14 +33,16 @@ From Andrej's post:
 
 ## The Solution
 
-Four principles in one file that directly address these issues:
+Four principles in a single unified specification that directly address these issues:
 
 | Principle | Addresses |
 |-----------|-----------|
-| **Think Before Coding** | Wrong assumptions, hidden confusion, missing tradeoffs |
-| **Simplicity First** | Overcomplication, bloated abstractions |
-| **Surgical Changes** | Orthogonal edits, touching code you shouldn't |
-| **Goal-Driven Execution** | Leverage through tests-first, verifiable success criteria |
+| **1. Think Before Coding** | Wrong assumptions, hidden confusion, missing tradeoffs |
+| **2. Simplicity First** | Overcomplication, bloated abstractions |
+| **3. Surgical Changes** | Orthogonal edits, touching code you shouldn't |
+| **4. Goal-Driven Execution** | Leverage through tests-first, verifiable success criteria |
+
+---
 
 ## The Four Principles in Detail
 
@@ -37,10 +52,10 @@ Four principles in one file that directly address these issues:
 
 LLMs often pick an interpretation silently and run with it. This principle forces explicit reasoning:
 
-- **State assumptions explicitly** — If uncertain, ask rather than guess
-- **Present multiple interpretations** — Don't pick silently when ambiguity exists
-- **Push back when warranted** — If a simpler approach exists, say so
-- **Stop when confused** — Name what's unclear and ask for clarification
+- **State assumptions explicitly** — If uncertain, ask rather than guess.
+- **Present multiple interpretations** — Don't pick silently when ambiguity exists.
+- **Push back when warranted** — If a simpler approach exists, say so.
+- **Stop when confused** — Name what's unclear and ask for clarification.
 
 ### 2. Simplicity First
 
@@ -48,11 +63,11 @@ LLMs often pick an interpretation silently and run with it. This principle force
 
 Combat the tendency toward overengineering:
 
-- No features beyond what was asked
-- No abstractions for single-use code
-- No "flexibility" or "configurability" that wasn't requested
-- No error handling for impossible scenarios
-- If 200 lines could be 50, rewrite it
+- No features beyond what was asked.
+- No abstractions for single-use code.
+- No "flexibility" or "configurability" that wasn't requested.
+- No error handling for impossible scenarios.
+- If 200 lines could be 50, rewrite it.
 
 **The test:** Would a senior engineer say this is overcomplicated? If yes, simplify.
 
@@ -62,15 +77,15 @@ Combat the tendency toward overengineering:
 
 When editing existing code:
 
-- Don't "improve" adjacent code, comments, or formatting
-- Don't refactor things that aren't broken
-- Match existing style, even if you'd do it differently
-- If you notice unrelated dead code, mention it — don't delete it
+- Don't "improve" adjacent code, comments, or formatting.
+- Don't refactor things that aren't broken.
+- Match existing style, even if you'd do it differently.
+- If you notice unrelated dead code, mention it — don't delete it.
 
 When your changes create orphans:
 
-- Remove imports/variables/functions that YOUR changes made unused
-- Don't remove pre-existing dead code unless asked
+- Remove imports/variables/functions that YOUR changes made unused.
+- Don't remove pre-existing dead code unless asked.
 
 **The test:** Every changed line should trace directly to the user's request.
 
@@ -96,42 +111,96 @@ For multi-step tasks, state a brief plan:
 
 Strong success criteria let the LLM loop independently. Weak criteria ("make it work") require constant clarification.
 
-## Install
+---
 
-**Option A: Claude Code Plugin (recommended)**
+## Install & Usage by Assistant
 
-From within Claude Code, first add the marketplace:
-```
-/plugin marketplace add forrestchang/andrej-karpathy-skills
-```
+### 1. Claude Code
 
-Then install the plugin:
-```
+**Option A: Claude Code Plugin (Recommended)**
+```bash
+/plugin marketplace add longhakly/andrej-karpathy-skills
 /plugin install andrej-karpathy-skills@karpathy-skills
 ```
 
-This installs the guidelines as a Claude Code plugin, making the skill available across all your projects.
-
-**Option B: CLAUDE.md (per-project)**
-
-New project:
+**Option B: CLAUDE.md (Per-project)**
 ```bash
-curl -o CLAUDE.md https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/CLAUDE.md
+# New project:
+curl -o CLAUDE.md https://raw.githubusercontent.com/longhakly/andrej-karpathy-skills/main/CLAUDE.md
+
+# Existing project (append):
+echo "" >> CLAUDE.md && curl https://raw.githubusercontent.com/longhakly/andrej-karpathy-skills/main/CLAUDE.md >> CLAUDE.md
 ```
 
-Existing project (append):
+---
+
+### 2. OpenAI Codex
+
+Codex automatically reads instructions from `AGENTS.md` at your workspace root.
+
+**Per-Project Instructions:**
 ```bash
-echo "" >> CLAUDE.md
-curl https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/CLAUDE.md >> CLAUDE.md
+curl -o AGENTS.md https://raw.githubusercontent.com/longhakly/andrej-karpathy-skills/main/AGENTS.md
 ```
 
-## Using with Cursor
+**Per-Project Skill (On-Demand):**
+```bash
+mkdir -p .agents/skills/karpathy-guidelines
+curl -sL https://raw.githubusercontent.com/longhakly/andrej-karpathy-skills/main/.agents/skills/karpathy-guidelines/SKILL.md \
+  -o .agents/skills/karpathy-guidelines/SKILL.md
+```
 
-This repository includes a committed Cursor project rule ([`.cursor/rules/karpathy-guidelines.mdc`](.cursor/rules/karpathy-guidelines.mdc)) so the same guidelines apply when you open the project in Cursor. See **[CURSOR.md](CURSOR.md)** for setup, using the rule in other projects, and how this relates to Claude Code.
+**Global (All Codex Sessions):**
+```bash
+mkdir -p ~/.codex && curl -sL https://raw.githubusercontent.com/longhakly/andrej-karpathy-skills/main/AGENTS.md >> ~/.codex/instructions.md
+```
+See **[CODEX.md](CODEX.md)** for full details.
+
+---
+
+### 3. Google Antigravity
+
+Antigravity natively discovers `GEMINI.md`, `AGENTS.md`, and skills under `.agents/skills/`.
+
+**Option A: Project Rule (Always Active)**
+```bash
+curl -o GEMINI.md https://raw.githubusercontent.com/longhakly/andrej-karpathy-skills/main/GEMINI.md
+```
+
+**Option B: Project Skill (On-Demand Progressive Disclosure)**
+```bash
+mkdir -p .agents/skills/karpathy-guidelines
+curl -sL https://raw.githubusercontent.com/longhakly/andrej-karpathy-skills/main/.agents/skills/karpathy-guidelines/SKILL.md \
+  -o .agents/skills/karpathy-guidelines/SKILL.md
+```
+
+**Option C: Global Antigravity Skill (All Projects on Machine)**
+```bash
+mkdir -p ~/.gemini/config/skills/karpathy-guidelines
+curl -sL https://raw.githubusercontent.com/longhakly/andrej-karpathy-skills/main/.agents/skills/karpathy-guidelines/SKILL.md \
+  -o ~/.gemini/config/skills/karpathy-guidelines/SKILL.md
+```
+See **[ANTIGRAVITY.md](ANTIGRAVITY.md)** for full details.
+
+---
+
+### 4. Cursor
+
+This repository includes a committed Cursor project rule ([`.cursor/rules/karpathy-guidelines.mdc`](.cursor/rules/karpathy-guidelines.mdc)). 
+
+To use in another Cursor project:
+```bash
+mkdir -p .cursor/rules
+curl -sL https://raw.githubusercontent.com/longhakly/andrej-karpathy-skills/main/.cursor/rules/karpathy-guidelines.mdc \
+  -o .cursor/rules/karpathy-guidelines.mdc
+```
+See **[CURSOR.md](CURSOR.md)** for details.
+
+---
 
 ## Key Insight
 
-From Andrej:
+From Andrej Karpathy:
 
 > "LLMs are exceptionally good at looping until they meet specific goals... Don't tell it what to do, give it success criteria and watch it go."
 
@@ -148,7 +217,7 @@ These guidelines are working if you see:
 
 ## Customization
 
-These guidelines are designed to be merged with project-specific instructions. Add them to your existing `CLAUDE.md` or create a new one.
+These guidelines are designed to be merged with project-specific instructions. Add them to your existing `AGENTS.md`, `GEMINI.md`, or `CLAUDE.md`.
 
 For project-specific rules, add sections like:
 
@@ -165,6 +234,10 @@ For project-specific rules, add sections like:
 These guidelines bias toward **caution over speed**. For trivial tasks (simple typo fixes, obvious one-liners), use judgment — not every change needs the full rigor.
 
 The goal is reducing costly mistakes on non-trivial work, not slowing down simple tasks.
+
+## Examples
+
+See **[EXAMPLES.md](EXAMPLES.md)** for real-world before/after code walkthroughs illustrating each principle.
 
 ## License
 
